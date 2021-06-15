@@ -4,9 +4,7 @@ class StocksController < ApplicationController
             @stock=Stock.new_lookup(params[:stock])
             if @stock
                 respond_to do |format|
-                   
-
-                    format.js{raise "Hello World"}
+                   format.js{render partial: 'users/result'}
                 end
             else
                 respond_to do |format|
@@ -15,8 +13,10 @@ class StocksController < ApplicationController
                   end
             end
         else
-            flash[:alert]="Please enter a symbol to search"
-            redirect_to my_portfolio_path
+            respond_to do |format|
+                flash.now[:alert] = "Please enter a  symbol to search"
+                format.js { render partial: 'users/result' }
+              end
         end
     end
 end
