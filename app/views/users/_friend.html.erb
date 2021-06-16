@@ -3,22 +3,19 @@
 </div>
 
 
-<% if @friend%>
+
 <div class="card card-header results-block">
     <strong> Email: </strong> <%= @friend.email%>
     <strong> Name: </strong> <%= @friend.first_name%> <%= @friend.last_name%>
-    <%=link_to 'Add to Friends',friendships_path(user: current_user, friend: @friend.), 
-                                                   class: 'btn btn-xs btn-success', method: :post%>
+    <% if current_user.can_follow_user?(@friend.first_name)%>
+        <%=link_to 'Add to Friends',friendships_path(user: current_user, first_name: @friend.first_name), 
+                                                    class: 'btn btn-xs btn-success', method: :post%>
     <%else%>
         <span class="label label-default">
-            You are already tracking 
-            <%if !current_user.under_stock_limit?%>
-                10  stocks
-            <%end%>
-            <%if !current_user.stock_already_tracked?(@stock.ticker)%>
-                this stock
+            You are already following
+            <%if !current_user.user_already_followed?(@friend.first_name)%>
+                this user
             <%end%>
         </span>
     <%end%>
 </div>
-<%end%>

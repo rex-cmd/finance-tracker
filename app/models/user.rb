@@ -20,12 +20,20 @@ class User < ApplicationRecord
   def can_track_stock?(ticker_symbol) 
     under_stock_limit? && !stock_already_tracked?(ticker_symbol)
   end
+  def user_already_followed?(first_name)
+    friend=User.check_db(first_name)
+    return false unless friend
+    friends.where(id: friend.id).exists?
+  end
+  def can_follow_user?(first_name)
+    !user_already_followed?(first_name)
+  end
   def full_name
     return "#{first_name} #{last_name}" if first_name || last_name
     "Anonymous"
   end
 
-  def self.check_db(first_name, last_name)
-    where(first_name: first_name,last_name: last_name).first
+  def self.check_db(first_name)
+    where(first_name: first_name).first
   end
 end
